@@ -2,10 +2,16 @@
 <?php
    require_once 'config.php' ;
    $where = null ;
+   if(isset($_GET['action']) && isset($_GET['id']) && !empty($_GET['id']) && !empty($_GET['action'])){
+     if($_GET['action'] <= 4){
+       $update = "UPDATE ".TASK_TBL." SET status=". $_GET['action']. " WHERE id=" . $_GET['id'];
+       $r = $connect->query($update) ;  
+     }
+   }
    if(isset($_GET['situation']) && !empty($_GET['situation']) && $_GET['situation'] <= 4){
     $where = 'WHERE status=' . intval($_GET['situation']) ;
    }
-  $query = 'SELECT * FROM `tasks`' . $where;
+  $query = 'SELECT * FROM `'.TASK_TBL .'`' . $where;
   $result = $connect->query($query);
   $rows =$result->fetch_all(MYSQLI_ASSOC);
 ?>
@@ -30,6 +36,28 @@
           <input type="search" placeholder="جست و جو..."/>
         </div>
       </div>
+      <div class="add-new-task">
+        <span class="title" >اضافه کردن وظیفه</span>
+          <form action="process/add_task.php" method="post">
+            <div class="input-group">
+              <input type="text" class="searchbox" placeholder="عنوان کار" name="task_title">
+            </div>
+            <div class="input-group">
+              <select name="task_owner" >
+                <option value="محمد">محمد</option>
+                <option value="علی رضا"> علی رضا</option>
+                <option value="مهران">مهران</option>
+                <option value="الهام">الهام</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <input type="date" class="searchbox" name="date">
+            </div>
+            <div class="input-group">
+              <input type="submit" class="searchbox green" value="اضافه کردن" name="submit">
+            </div>
+          </form>
+        </div>
       <div class="menu">
         <div class="title">منوی برنامه</div>
         <ul>
@@ -57,7 +85,7 @@
               <a href="./" class="all-task">همه</a>              
               <a href="?situation=1" class="active-task">در حال انجام</a>
               <a href="?situation=2" class="green">انجام شده</a>
-              <a href="?situation=3" class="pending">در انتظار تایید</a>
+              <a href="?situation=3" class="pending">در دست بررسی</a>
               <a href="?situation=4" class="draft">پیشنویس</a>
             </div>
           </div>
@@ -69,13 +97,23 @@
               <?php else :?>
                 <i class="fa fa-square-o"></i>
               <?php endif ;?>              
-              <span><?= $task->title ?></span>
+              <span><?= $task->title ?> | متعلق به : <?=$task->owner?></span>              
               <div class="info">
-                <div class="button <?= $situation_style[$task->status] ;?>"><?= $task_status[$task->status] ;?></div><span>  تاریخ انجام :  <?=jdate( 'd-m-Y',time($task->create_at)) ;?></span>              </div>
+                <div class="button <?= $situation_style[$task->status] ;?>">
+                <?= $task_status[$task->status] ;?>
+              </div>
+              <span>  تاریخ انجام :  <?=jdate( 'd-m-Y',strtotime($task->run_date)) ;?></span>
+              <span class="operator">
+                <a href="?action=1&id=<?=$task->id?>">درحال انجام</a> |
+                <a href="?action=2&id=<?=$task->id?>">انجام شد</a> |
+                <a href="?action=4&id=<?=$task->id?>">پیشنویس</a> |
+                <a href="?action=3&id=<?=$task->id?>">در دست بررسی</a>                
+              </span>            
+              </div>
             </li>
             <?php endforeach ; ?>
           </ul>
-        </div>
+        </div>        
         <div class="list">
           <div class="title">روز بعد</div>
           <ul>
@@ -87,10 +125,14 @@
             </li>
           </ul>
         </div>
+        
       </div>
     </div>
+
   </div>
+  
 </div>
+
   <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script> 
     <script  src="assets/js/script.js"></script>
 </body>

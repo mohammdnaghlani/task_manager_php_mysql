@@ -19,7 +19,7 @@ body {
   width: 80%;
   height: 80%;
   right: 10%;
-  top: 10%;
+  top: 4%;
   background-color: rgba(255, 255, 255, 0.7);
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
@@ -262,6 +262,18 @@ input::placeholder{
 }
 .main .view .content .list ul li .info {
   float: left;
+  position: relative;
+}
+.operator{
+  position: absolute;
+  bottom: -17px;
+  width: 100%;
+  left: 40px; 
+}
+.operator a{
+  font-size: 8px !important;
+  text-decoration: none;
+  color: #000;  
 }
 .main .view .content .list ul li .info span {
   font-weight: 300;
@@ -303,4 +315,34 @@ input::placeholder{
 }
 .clear {
   clear: both;
+}
+.add-new-task{
+  border-top: 1px solid #777;
+  padding: 10px 0 
+}
+.add-new-task .title{
+  margin-right:10px;
+  color: #3498db;
+  font-size: 12px;
+}
+.add-new-task .input-group{
+  margin: 0px;
+}
+.add-new-task input ,.add-new-task select{
+  border: none;
+  outline: none;
+  padding-right: 5px;
+  margin: 5px 5px !important;
+  box-shadow:  0 0 2px rgba(0, 0, 0, 0.16);
+  font-family:IRANSans;
+
+}
+.add-new-task select{
+  width: 88%;
+  border-radius: 4px;
+  padding: 5px
+}
+.add-new-task input[type=submit]{
+  color:#ffffff;
+  font-weight: 400;
 }
